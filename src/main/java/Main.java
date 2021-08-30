@@ -15,14 +15,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main extends ListenerAdapter {
+    private static Bot bot;
+    private static Config config;
+
     public static void main(String[] args) throws LoginException, IOException {
         Gson gson = new Gson();
 
         Reader reader = Files.newBufferedReader(Paths.get("bot.json"));
         Reader reader2 = Files.newBufferedReader(Paths.get("config.json"));
 
-        Bot bot = gson.fromJson(reader, Bot.class);
-        Config config = gson.fromJson(reader2, Config.class);
+        Main.bot = gson.fromJson(reader, Bot.class);
+        Main.config = gson.fromJson(reader2, Config.class);
 
         reader.close();
         reader2.close();
