@@ -45,7 +45,7 @@ public class CommandManager {
 
     void handle(GuildMessageReceivedEvent event) {
         String[] split = event.getMessage().getContentRaw()
-                .replaceFirst("(?i)" + Pattern.quote(Config.get("prefix")), "")
+                .replaceFirst("(?i)" + Pattern.quote(Config.getPrefix()), "")
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();
