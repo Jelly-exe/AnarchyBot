@@ -27,3 +27,4 @@ bot.json
 .gradle/*
 build/*
 gradle/*
+*.env
