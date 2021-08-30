@@ -2,6 +2,7 @@ package dev.elliotfrost.anarchybot;
 
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
+import dev.elliotfrost.anarchybot.command.commands.MemberCount;
 import dev.elliotfrost.anarchybot.command.commands.Ping;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -16,6 +17,7 @@ public class CommandManager {
 
     public CommandManager() {
         addCommand(new Ping());
+        addCommand(new MemberCount());
     }
 
     private void addCommand(ICommand cmd) {
