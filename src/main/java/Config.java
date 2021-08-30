@@ -1,5 +1,7 @@
 public class Config {
+    public String prefix;
 
-    public Config() {
+    public Config(String prefix) {
+        this.prefix = prefix;
     }
 }
