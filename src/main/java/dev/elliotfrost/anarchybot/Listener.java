@@ -3,8 +3,13 @@ package dev.elliotfrost.anarchybot;
 import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.Button;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +44,29 @@ public class Listener extends ListenerAdapter {
 
         if (raw.startsWith(prefix)) {
             manager.handle(event);
+        }
+    }
+
+    @Override
+    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+        if (event.getName().equals("test")) {
+            event.reply("Testing")
+                    .addActionRow(
+                            Button.primary("test", "Test"))
+                    .queue();
+        }
+    }
+
+    @Override
+    public void onButtonClick(ButtonClickEvent event) {
+        if (event.getComponentId().equals("test")) {
+            event.reply("Test").setEphemeral(true).queue();
+        }
+    }
+    @Override
+    public void onSelectionMenu(SelectionMenuEvent event) {
+        if (event.getComponentId().equals("menu:testing")) {
+            event.reply("Test").setEphemeral(true).queue();
         }
     }
 }

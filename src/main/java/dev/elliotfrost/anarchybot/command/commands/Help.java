@@ -10,6 +10,7 @@ public class Help implements ICommand {
         JDA jda = ctx.getJDA();
 
         ctx.getChannel().sendMessage("This is a very unhelpful message").queue();
+        System.out.println(ctx.getGuild().getId());
     }
 
     @Override
