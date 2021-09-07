@@ -21,6 +21,7 @@ dependencies {
     implementation('net.dv8tion:JDA:4.3.0_323')
     implementation('com.google.code.gson:gson:2.8.8')
     implementation('io.github.cdimascio:dotenv-java:2.2.0')
+    implementation('io.github.MrGraversen:minecraft-rcon:0.0.16')
     implementation group: 'me.duncte123', name: 'botCommons', version: '2.3.8'
 }
 
