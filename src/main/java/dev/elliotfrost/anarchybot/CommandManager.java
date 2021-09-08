@@ -20,6 +20,7 @@ public class CommandManager {
         addCommand(new Help());
         addCommand(new TicketMenu());
         addCommand(new Suggest());
+        addCommand(new Testing());
     }
 
     private void addCommand(ICommand cmd) {
