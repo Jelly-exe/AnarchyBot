@@ -33,7 +33,7 @@ public class Give implements ICommand {
 
     @Override
     public List<String> getAliases() {
-        return List.of();
+        return List.of("g");
     }
 
 }
