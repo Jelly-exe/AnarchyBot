@@ -1,16 +1,8 @@
 plugins {
     id "java"
 }
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'dev.elliotfrost.anarchybot.Bot'
-        )
-    }
-}
 
-
-group 'dev.elliotfrost'
+group 'dev.elliotfrost.anarchybot'
 version ''
 
 repositories {
