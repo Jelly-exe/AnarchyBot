@@ -1,38 +1,29 @@
 package dev.elliotfrost.anarchybot.command.commands;
 
+import com.mattmalec.pterodactyl4j.PteroBuilder;
+import com.mattmalec.pterodactyl4j.client.entities.PteroClient;
+import dev.elliotfrost.anarchybot.Config;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
-import io.graversen.minecraft.rcon.MinecraftRcon;
-import io.graversen.minecraft.rcon.service.ConnectOptions;
-import io.graversen.minecraft.rcon.service.MinecraftRconService;
-import io.graversen.minecraft.rcon.service.RconDetails;
 import net.dv8tion.jda.api.JDA;
 
-import java.time.Duration;
 import java.util.List;
 
 public class Give implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
-        List<String> args =ctx.getArgs();
+        List<String> args = ctx.getArgs();
 
-        final MinecraftRconService minecraftRconService = new MinecraftRconService(
-                new RconDetails("51.195.188.184", 25645, "f9cyR8qbkZpPCWD"),
-                ConnectOptions.defaults()
-        );
+        String ign = args.get(0), item = args.get(1);
+        int amount = Integer.parseInt(args.get(2));
 
-        // Let's go!
-        minecraftRconService.connectBlocking(Duration.ofSeconds(3));
+        String command = String.format("give %s minecraft:%s %s", ign, item, amount);
 
-        // After connecting, we can (crudely) fetch the underlying Minecraft RCON provider
-        final MinecraftRcon minecraftRcon = minecraftRconService.minecraftRcon().orElseThrow(IllegalStateException::new);
+        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
+        api.retrieveServerByIdentifier("SERVER ID").flatMap(server -> server.sendCommand(command)).executeAsync();
 
-        // final
-
-
-
-
+        ctx.getChannel().sendMessage("Done shit").queue();
     }
 
     @Override
@@ -46,3 +37,4 @@ public class Give implements ICommand {
     }
 
 }
+
