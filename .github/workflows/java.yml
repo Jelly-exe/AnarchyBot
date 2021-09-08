@@ -31,9 +31,3 @@ jobs:
         run: |
          rm -f ~/.gradle/caches/modules-2/modules-2.lock
          rm -f ~/.gradle/caches/modules-2/gc.properties
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "build/libs/*.jar"
-          bodyFile: "body.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
