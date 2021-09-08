@@ -6,21 +6,29 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.List;
 
-public class Help implements ICommand {
+public class Give2 implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
+        List<String> args = ctx.getArgs();
 
-        ctx.getChannel().sendMessage("This is a very unhelpful message").queue();
+        String ign = args.get(0), item = args.get(1);
+        int amount = Integer.parseInt(args.get(2));
+
+        String command = String.format("give %s minecraft:%s %s", ign, item, amount);
+
+        // GiveCommand giveCommand = new GiveCommand(new Target(ign), new MinecraftItem(item), "{}", amount);
     }
 
     @Override
     public String getName() {
-        return "help";
+        return "give2";
     }
 
     @Override
     public List<String> getAliases() {
         return List.of();
     }
+
 }
+

@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 
+import java.util.List;
+
 public class TicketMenu implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
@@ -37,5 +39,10 @@ public class TicketMenu implements ICommand {
     @Override
     public String getName() {
         return "ticketmenu";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return List.of();
     }
 }
