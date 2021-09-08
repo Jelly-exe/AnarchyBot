@@ -4,7 +4,7 @@ plugins {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'dev.elliotfrost.Bot'
+                'Main-Class': 'dev.elliotfrost.anarchybot.Bot'
         )
     }
 }
