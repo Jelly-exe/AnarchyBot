@@ -1,5 +1,8 @@
 package dev.elliotfrost.anarchybot.command.commands;
 
+import com.mattmalec.pterodactyl4j.PteroBuilder;
+import com.mattmalec.pterodactyl4j.client.entities.PteroClient;
+import dev.elliotfrost.anarchybot.Config;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import net.dv8tion.jda.api.JDA;
@@ -17,7 +20,10 @@ public class Give2 implements ICommand {
 
         String command = String.format("give %s minecraft:%s %s", ign, item, amount);
 
-        // GiveCommand giveCommand = new GiveCommand(new Target(ign), new MinecraftItem(item), "{}", amount);
+        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
+        api.retrieveServerByIdentifier("SERVER ID").flatMap(server -> server.sendCommand(command)).executeAsync();
+
+        ctx.getChannel().sendMessage("Done shit").queue();
     }
 
     @Override

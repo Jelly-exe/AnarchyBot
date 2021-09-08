@@ -17,6 +17,9 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
+    maven {
+        url = 'https://repo.mattmalec.com/repository/releases'
+    }
 }
 
 dependencies {
@@ -27,6 +30,7 @@ dependencies {
     implementation('io.github.cdimascio:dotenv-java:2.2.0')
     implementation group: 'me.duncte123', name: 'botCommons', version: '2.3.8'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
+    implementation 'com.mattmalec:Pterodactyl4J:2.BETA_80'
 
 }
 
