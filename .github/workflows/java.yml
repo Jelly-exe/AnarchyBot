@@ -20,8 +20,8 @@ jobs:
         run: ./gradlew build
       - uses: actions/upload-artifact@v2
         with:
-          name: Package
-          path: build/libs
+          name: AnarchyBot
+          path: build/libs/AnarchyBot.jar
 
       - name: Cleanup Gradle Cache
         run: |
