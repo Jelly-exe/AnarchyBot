@@ -20,8 +20,8 @@ public class Give2 implements ICommand {
 
         String command = String.format("give %s minecraft:%s %s", ign, item, amount);
 
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        api.retrieveServerByIdentifier("SERVER ID").flatMap(server -> server.sendCommand(command)).executeAsync();
+        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get($TOKEN)); //This needs to be an ENV Variable stat
+        api.retrieveServerByIdentifier("1ab25fdd").flatMap(server -> server.sendCommand(command)).executeAsync();
 
         ctx.getChannel().sendMessage("Done shit").queue();
     }
