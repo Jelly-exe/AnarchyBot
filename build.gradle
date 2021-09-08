@@ -1,9 +1,17 @@
 plugins {
     id "java"
 }
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'dev.elliotfrost.Bot'
+        )
+    }
+}
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+
+group 'dev.elliotfrost'
+version ''
 
 repositories {
     google()
