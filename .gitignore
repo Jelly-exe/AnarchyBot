@@ -25,6 +25,4 @@ hs_err_pid*
 .idea/*
 bot.json
 .gradle/*
-build/*
-gradle/*
 .env
