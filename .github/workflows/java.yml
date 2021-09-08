@@ -35,6 +35,5 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/libs/*.jar"
-          bodyFile: "body.md"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "latest"
