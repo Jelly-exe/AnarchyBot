@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.requests.restaction.pagination.ReactionPaginationActi
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Objects;
 
 public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
@@ -68,7 +68,7 @@ public class Listener extends ListenerAdapter {
                         event.getReaction().removeReaction(user).queue();
                         return true;
                     }
-                    ;
+
                     return false;
                 });
             } catch (Exception e) {
@@ -94,14 +94,61 @@ public class Listener extends ListenerAdapter {
 //        }
 //    }
 
+//    @Override
+//    public void onSelectionMenu(SelectionMenuEvent event) {
+//        if (event.getComponentId().equals("menu:tickets")) {
+//            List<String> values = event.getValues();
+//
+//            event.reply("Creating the ticket goes here. Selected Value: `" + values.get(0) + "`")
+//                    .setEphemeral(true)
+//                    .queue();
+//        }
+//    }
+
     @Override
     public void onSelectionMenu(SelectionMenuEvent event) {
-        if (event.getComponentId().equals("menu:tickets")) {
-            List<String> values = event.getValues();
+        if (event.getComponentId().equals("ci is gay ")) {
+            int catId;
+            switch (event.getValues().get(0)) {
+                case "bug":
+                    catId = 1;
+                    break;
 
-            event.reply("Creating the ticket goes here. Selected Value: `" + values.get(0) + "`")
-                    .setEphemeral(true)
-                    .queue();
+                case "report":
+                    catId = 1;
+                    break;
+
+                case "support":
+                    catId = 1;
+                    break;
+
+                default:
+                    catId = 1;
+                    // other
+                }
+                String user = event.getUser().getName() + "#" + event.getUser().getDiscriminator(), ticketnum = "dbpull go here";
+                event.reply("Making ticket :)")
+                        .setEphemeral(true)
+                        .queue();
+                event.getChannel().sendTyping().queue();
+
+                // createTextChannel(String name, Category parent) - Everything else uses .<actions>
+                // "%s's support ticket || has had %s ticket(s)"
+                Objects.requireNonNull(event.getGuild()).createTextChannel(user,  event.getGuild().getCategoryById(catId))
+                        .addMemberPermissionOverride(event.getUser().getIdLong(), 1024, 0)
+                        .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
+                        .queue();
+                // DB Code for adding a ticket to user's total here
+                // DB code for getting a user's info (linked accts etc)
+                // IT WONT LET ME PASTE
+                // Embed Code ^
         }
     }
+
+
+    // Also, just a suggestion. Instead of generating each embed inside a switch statement.
+    // I advise you just set the string in each, and then build the embed with the string variable at the end
+
+    // smart!
+    // big brain
 }

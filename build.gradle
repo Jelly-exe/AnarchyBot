@@ -18,7 +18,7 @@ repositories {
         url 'https://jitpack.io'
     }
     maven {
-        url = 'https://repo.mattmalec.com/repository/releases'
+        url 'https://repo.mattmalec.com/repository/releases'
     }
 }
 
