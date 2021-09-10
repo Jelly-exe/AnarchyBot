@@ -2,7 +2,6 @@ package dev.elliotfrost.anarchybot;
 
 import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -115,9 +114,6 @@ public class Listener extends ListenerAdapter {
     public void onSelectionMenu(SelectionMenuEvent event) {
         if (event.getComponentId().equals("menu:tickets")) {
             String user = event.getUser().getName() + "#" + event.getUser().getDiscriminator(), ticketnum = "dbpull go here";
-            event.reply("Making ticket :)")
-                    .setEphemeral(true)
-                    .queue();
             event.getChannel().sendTyping().queue();
             String title = "*** ***", descr = "*** ***", java = "*** ***", br = "*** ***", icon = "*** ***";
             Color color = Color.BLUE;
@@ -164,14 +160,6 @@ public class Listener extends ListenerAdapter {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
 
-            Objects.requireNonNull(event.getGuild()).createTextChannel(user + " - " + ticketnum,  event.getGuild().getCategoryById("867535554253684807"))
-                        .addMemberPermissionOverride(event.getUser().getIdLong(), 1024, 0)
-                        .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
-                        .setTopic(user + "'s support ticket || has had " + ticketnum + " ticket(s)")
-                        .queue(); // This needs to be a variable, so that we can send a message in this channel.
-            // DB Code for adding a ticket to user's total here
-                // DB code for getting a user's info (linked accts etc)
-
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle(title)
                     .setDescription(descr)
@@ -182,7 +170,22 @@ public class Listener extends ListenerAdapter {
                     .setImage(icon)
                     .setFooter("Ticket Made for" + user)
                     .build();
-            event.getChannel().sendMessageEmbeds(embed).queue();
+
+            Objects.requireNonNull(event.getGuild()).createTextChannel(user + " - " + ticketnum,  event.getGuild().getCategoryById("867535554253684807"))
+                        .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
+                        .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
+                        .setTopic(user + "'s support ticket || has had " + ticketnum + " ticket(s)")
+                        .queue(channel -> {
+                            channel.sendMessageEmbeds(embed).queue();
+                            event.reply("Making ticket :) <#" + channel.getId() + ">")
+                                    .setEphemeral(true)
+                                    .queue();
+                        });
+            // DB Code for adding a ticket to user's total here
+                // DB code for getting a user's info (linked accts etc)
+
+
+
         }
     }
 }
