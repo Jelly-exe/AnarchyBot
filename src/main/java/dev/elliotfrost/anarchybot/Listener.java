@@ -2,6 +2,7 @@ package dev.elliotfrost.anarchybot;
 
 import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -181,7 +182,8 @@ public class Listener extends ListenerAdapter {
                                     .setEphemeral(true)
                                     .queue();
                         });
-            // DB Code for adding a ticket to user's total here
+
+                // DB Code for adding a ticket to user's total here
                 // DB code for getting a user's info (linked accts etc)
 
 
