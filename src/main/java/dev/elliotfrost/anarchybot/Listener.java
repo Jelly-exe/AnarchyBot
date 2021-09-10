@@ -177,7 +177,7 @@ public class Listener extends ListenerAdapter {
                         .setTopic(user + "'s support ticket || has had " + ticketnum + " ticket(s)")
                         .queue(channel -> {
                             channel.sendMessageEmbeds(embed).queue();
-                            event.reply("Making ticket :) <#" + channel.getId() + ">")
+                            event.reply("Your ticket is: <#" + channel.getId() + ">")
                                     .setEphemeral(true)
                                     .queue();
                         });
