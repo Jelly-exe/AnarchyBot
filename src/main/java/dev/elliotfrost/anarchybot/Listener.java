@@ -18,8 +18,11 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
@@ -157,27 +160,25 @@ public class Listener extends ListenerAdapter {
                     break;
                     // other
             }
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-
+            ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle(title)
                     .setDescription(descr)
                     .setColor(color)
+                    .addField("User has had", ticketnum + " tickets (not incuding this one)", false)
                     .addField("Java Minecraft User:", java, false)
                     .addField("Bedrock Minecraft User:", br, false)
-                    .addField("Ticket Created (GMT):", dtf.format(now), false)
-                    .setImage(icon)
-                    .setFooter("Ticket Made for" + user)
+                    .addField("Ticket Created (UTC):", utc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) , false)
+                    .setThumbnail(icon)
+                    .setFooter("Ticket Made for " + user)
                     .build();
 
-            Objects.requireNonNull(event.getGuild()).createTextChannel(user + " - " + ticketnum,  event.getGuild().getCategoryById("867535554253684807"))
+            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "__" + ticketnum,  event.getGuild().getCategoryById("867535554253684807"))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
-                        .setTopic(user + "'s support ticket || has had " + ticketnum + " ticket(s)")
+                        .setTopic(user + "'s support ticket || has had " + (ticketnum + 1) + " ticket(s)")
                         .queue(channel -> {
-                            channel.sendMessageEmbeds(embed).queue();
+                            channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).queue();
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
                                     .setEphemeral(true)
                                     .queue();
