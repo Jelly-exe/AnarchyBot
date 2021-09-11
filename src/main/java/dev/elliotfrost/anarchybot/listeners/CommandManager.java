@@ -24,6 +24,8 @@ public class CommandManager extends ListenerAdapter {
         addCommand(new TicketMenu());
         addCommand(new Suggest());
         addCommand(new Testing());
+        addCommand(new Clean());
+        addCommand(new Clean2());
     }
 
     private void addCommand(ICommand cmd) {
