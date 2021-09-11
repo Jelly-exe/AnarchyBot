@@ -57,7 +57,7 @@ public class CommandManager extends ListenerAdapter {
 
         if (user.isBot() || event.isWebhookMessage()) { return; }
 
-        String prefix = Config.get("prefix");
+        String prefix = Config.getPrefix();
         String raw = event.getMessage().getContentRaw();
 
         if (!raw.startsWith(prefix)) { return; }
