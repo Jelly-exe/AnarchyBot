@@ -10,8 +10,8 @@ public class Clean implements ICommand {
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
         List<String> args = ctx.getArgs();
-        int x;
-        for (x in args[0]) {
+
+        for (int i = 0; i <= Integer.parseInt(args.get(0)); i = i + 1) {
             String a = ctx.getChannel().getLatestMessageId();
             ctx.getChannel().deleteMessageById(a);
         }
