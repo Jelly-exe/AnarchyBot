@@ -1,9 +1,12 @@
-package dev.elliotfrost.anarchybot;
+package dev.elliotfrost.anarchybot.listeners;
 
+import dev.elliotfrost.anarchybot.Config;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import dev.elliotfrost.anarchybot.command.commands.*;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class CommandManager {
+public class CommandManager extends ListenerAdapter {
     private final List<ICommand> commands = new ArrayList<>();
 
     public CommandManager() {
@@ -48,9 +51,19 @@ public class CommandManager {
         return null;
     }
 
-    void handle(GuildMessageReceivedEvent event) {
+    @Override
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        User user = event.getAuthor();
+
+        if (user.isBot() || event.isWebhookMessage()) { return; }
+
+        String prefix = Config.get("prefix");
+        String raw = event.getMessage().getContentRaw();
+
+        if (!raw.startsWith(prefix)) { return; }
+
         String[] split = event.getMessage().getContentRaw()
-                .replaceFirst("(?i)" + Pattern.quote(Config.getPrefix()), "")
+                .replaceFirst("(?i)" + Pattern.quote(prefix), "")
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();

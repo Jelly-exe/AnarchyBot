@@ -1,28 +1,28 @@
-package dev.elliotfrost.anarchybot;
+package dev.elliotfrost.anarchybot.listeners;
 
-import me.duncte123.botcommons.BotCommons;
+import dev.elliotfrost.anarchybot.Bot;
+import dev.elliotfrost.anarchybot.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import net.dv8tion.jda.api.requests.restaction.pagination.ReactionPaginationAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.time.Instant;
 import java.util.Objects;
-import java.util.TimeZone;
 
 public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
@@ -31,29 +31,6 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
-    }
-
-    @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        User user = event.getAuthor();
-
-        if (user.isBot() || event.isWebhookMessage()) { return; }
-
-        String prefix = Config.get("prefix");
-        String raw = event.getMessage().getContentRaw();
-
-        if (raw.equalsIgnoreCase(prefix + "shutdown")
-                && user.getId().equals(Config.get("owner_id"))) {
-            LOGGER.info("Shutting down");
-            event.getJDA().shutdown();
-            BotCommons.shutdown(event.getJDA());
-
-            return;
-        }
-
-        if (raw.startsWith(prefix)) {
-            manager.handle(event);
-        }
     }
 
     @Override
@@ -117,68 +94,71 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onSelectionMenu(SelectionMenuEvent event) {
         if (event.getComponentId().equals("menu:tickets")) {
-            String user = event.getUser().getName() + "#" + event.getUser().getDiscriminator(), ticketnum = "dbpull go here";
-            event.getChannel().sendTyping().queue();
-            String title = "*** ***", descr = "*** ***", java = "*** ***", br = "*** ***", icon = "*** ***";
-            Color color = Color.BLUE;
-            // It should be here, so that the user is immediately notified instead of waiting for other code to run.
+            SelectionMenu menu = SelectionMenu.create("menu:tickets")
+                    .setPlaceholder("Select a reason...")
+                    .addOption("Server Bug / Issue", "bug", "Report any bugs or issues with the minecraft server.", Emoji.fromMarkdown("\uD83D\uDC1B"))
+                    .addOption("Player Report", "report", "Report a players actions (discord or server).", Emoji.fromMarkdown("\uD83D\uDD12"))
+                    .addOption("Support", "support", "Get help with anything server related.", Emoji.fromMarkdown("\u2753"))
+                    .addOption("Other", "other", "Anything which doesnt fall into an above category.", Emoji.fromMarkdown("\uD83D\uDCF0"))
+                    .build();
+
+            event.getMessage().editMessageComponents(ActionRow.of(menu)).queue();
+            Statement statement;
+            ResultSet result;
+            int ticketNum = Bot.getDatabaseManager().getDatabaseTickets().getTicketNumber(event.getUser().getId());
+
+            String user = event.getUser().getName() + "#" + event.getUser().getDiscriminator();
+
+            String title, descr, java, br, icon;
+            Color color;
+
             switch (event.getValues().get(0)) {
-                case "bug":
+                case "bug" -> {
                     color = Color.RED;
-                    title = "Bug Report";
                     descr = "A bug report";
                     java = "testjavausername";
                     br = "testbrusername";
-                    icon = "https://www.skynode.pro/favicon-192x192.png";
-                    break;
-
-                case "report":
+                }
+                case "report" -> {
                     color = Color.lightGray;
-                    title = "Player Report";
                     descr = "A Player report";
                     java = "testjavausername";
                     br = "testbrusername";
-                    icon = "https://www.skynode.pro/favicon-192x192.png";
-                    break;
-
-                case "support":
+                }
+                case "support" -> {
                     color = Color.GREEN;
-                    title = "Support";
                     descr = "General Support";
                     java = "testjavausername";
                     br = "testbrusername";
-                    icon = "https://www.skynode.pro/favicon-192x192.png";
-                    break;
-
-                default:
+                }
+                default -> {
                     color = Color.GREEN;
-                    title = "Other";
                     descr = "Other things you may need to talk to the admin for";
                     java = "testjavausername";
                     br = "testbrusername";
-                    icon = "https://www.skynode.pro/favicon-192x192.png";
-                    break;
-                    // other
+                }
             }
-            ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+            // ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
             MessageEmbed embed = new EmbedBuilder()
-                    .setTitle(title)
+                    .setTitle("New Ticket - Opened by " + user)
                     .setDescription(descr)
+                    .addField("Java IGN:", java, true)
+                    .addField("Bedrock IGN:", br, true)
+                    .setTimestamp(Instant.now())
                     .setColor(color)
-                    .addField("User has had", ticketnum + " tickets (not incuding this one)", false)
-                    .addField("Java Minecraft User:", java, false)
-                    .addField("Bedrock Minecraft User:", br, false)
-                    .addField("Ticket Created (UTC):", utc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) , false)
-                    .setThumbnail(icon)
-                    .setFooter("Ticket Made for " + user)
+                    .setThumbnail("https://i.imgur.com/i4ht6nZ.png")
+                    .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
 
-            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "__" + ticketnum,  event.getGuild().getCategoryById("867535554253684807"))
+            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById("867535554253684807"))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
-                        .setTopic(user + "'s support ticket || has had " + (ticketnum + 1) + " ticket(s)")
+                        .setTopic(user + "'s support ticket || has had " + ticketNum + " ticket(s)")
                         .queue(channel -> {
-                            channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).queue();
+                            channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).setActionRow(Button.danger("button:close", "Close Ticket"), Button.success("button:transcript", "Generate Transcript")).queue(message -> {
+                                    channel.pinMessageById(message.getId());
+                                    }
+                            );
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
                                     .setEphemeral(true)
                                     .queue();
@@ -186,9 +166,17 @@ public class Listener extends ListenerAdapter {
 
                 // DB Code for adding a ticket to user's total here
                 // DB code for getting a user's info (linked accts etc)
+        }
+    }
 
-
-
+    @Override
+    public void onButtonClick(ButtonClickEvent event) {
+        if (event.getComponentId().equals("button:close")) {
+            event.getGuildChannel().delete().queue();
+        } else if (event.getComponentId().equals("button:transcript")) {
+            event.reply("This feature is currently disabled.")
+                    .setEphemeral(true)
+                    .queue();
         }
     }
 }
