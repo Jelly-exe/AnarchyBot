@@ -153,10 +153,10 @@ public class Listener extends ListenerAdapter {
             Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById("867535554253684807"))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
-                        .setTopic(user + "'s support ticket || has had " + ticketNum + " ticket(s)")
+                        .setTopic(user + "'s support ticket || They've had " + ticketNum + " ticket(s)")
                         .queue(channel -> {
                             channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).setActionRow(Button.danger("button:close", "Close Ticket"), Button.success("button:transcript", "Generate Transcript")).queue(message -> {
-                                    channel.pinMessageById(message.getId());
+                                    channel.pinMessageById(message.getId()).queue();
                                     }
                             );
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
@@ -174,7 +174,13 @@ public class Listener extends ListenerAdapter {
         if (event.getComponentId().equals("button:close")) {
             event.getGuildChannel().delete().queue();
         } else if (event.getComponentId().equals("button:transcript")) {
-            event.reply("This feature is currently disabled.")
+//            MessagePaginationAction history = event.getChannel().getIterableHistory();
+//            history.forEachAsync((message) -> {
+//                // do transcription generating shit here :)
+//                return true;
+//            });
+//           System.out.println(history);
+            event.reply("Thanks! You've just absolutely terrorized our console!")
                     .setEphemeral(true)
                     .queue();
         }
