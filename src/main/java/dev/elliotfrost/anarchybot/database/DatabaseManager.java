@@ -8,6 +8,7 @@ public class DatabaseManager {
     private static final HikariConfig config = new HikariConfig();
 
     private static DatabaseTickets databaseTickets;
+    private static DatabaseToDo databaseToDo;
     private final HikariDataSource ds;
 
     public DatabaseManager() {
@@ -19,9 +20,11 @@ public class DatabaseManager {
         this.ds = new HikariDataSource(config);
 
         databaseTickets = new DatabaseTickets(ds);
+        databaseToDo = new DatabaseToDo(ds);
     }
 
     public DatabaseTickets getDatabaseTickets() {
         return databaseTickets;
     }
+    public DatabaseToDo getDatabaseToDo() { return databaseToDo; }
 }

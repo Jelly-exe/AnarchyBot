@@ -6,27 +6,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DatabaseTickets {
+public class DatabaseToDo {
     private final DataSource ds;
 
-    DatabaseTickets(DataSource ds) {
+    DatabaseToDo(DataSource ds) {
         this.ds = ds;
     }
 
-    public int getTicketNumber(String authorId) {
+    public void getToDoList(String channelId) {
         try {
             Connection connection = this.ds.getConnection();
-            PreparedStatement statement = connection.prepareStatement(String.format("SELECT * FROM Tickets WHERE AuthorId = %s", authorId), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(String.format("SELECT * FROM ToDo WHERE channelId = %s", channelId), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet result = statement.executeQuery();
-
-            result.last();
-            int ticketNo = result.getRow();
-            connection.close();
-            return ticketNo;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return 0;
     }
- }
+}
