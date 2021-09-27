@@ -18,7 +18,7 @@ public class Bot {
     private Bot() throws LoginException {
         JDA jda = JDABuilder.createLight(Config.get("token"))
                 .addEventListeners(new Listener(), new CommandManager(), new Tickets(), new Suggestions(), new Roles())
-                .setActivity(Activity.watching("everyone!"))
+                .setActivity(Activity.playing("on anarchy.ciputin.cf"))
                 .build();
     }
     public static void main(String[] args) throws LoginException {

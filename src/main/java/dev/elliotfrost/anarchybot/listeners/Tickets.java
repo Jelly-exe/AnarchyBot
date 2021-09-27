@@ -1,11 +1,13 @@
 package dev.elliotfrost.anarchybot.listeners;
 
 import dev.elliotfrost.anarchybot.Bot;
+import dev.elliotfrost.anarchybot.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -14,9 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 public class Tickets extends ListenerAdapter {
@@ -82,7 +88,7 @@ public class Tickets extends ListenerAdapter {
                     .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
 
-            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById("867535554253684807"))
+            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.get("SUPPORT-CAT")))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
                         .setTopic(user + "'s support ticket || They've had " + ticketNum + " ticket(s)")
@@ -94,8 +100,20 @@ public class Tickets extends ListenerAdapter {
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
                                     .setEphemeral(true)
                                     .queue();
+                            File transcript = new File(channel.getName() + ".txt");
+                            try {
+                                transcript.createNewFile();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                FileWriter writable = new FileWriter(channel.getName() + ".txt", true);
+                                writable.append("User Created Support Ticket");
+                                writable.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         });
-
                 // DB Code for adding a ticket to user's total here
                 // DB code for getting a user's info (linked accts etc)
         }
@@ -105,16 +123,28 @@ public class Tickets extends ListenerAdapter {
     public void onButtonClick(ButtonClickEvent event) {
         if (event.getComponentId().equals("button:close")) {
             event.getGuildChannel().delete().queue();
+                File transc = new File(event.getChannel().getName() + ".txt");
+                transc.delete();
+
         } else if (event.getComponentId().equals("button:transcript")) {
-//            MessagePaginationAction history = event.getChannel().getIterableHistory();
-//            history.forEachAsync((message) -> {
-//                // do transcription generating shit here :)
-//                return true;
-//            });
-//           System.out.println(history);
-            event.reply("Thanks! You've just absolutely terrorized our console!")
+            File transcript = new File(event.getChannel().getName() + ".txt");
+            event
+                    .reply("Here is your transcript (contains " + event.getChannel().getIterableHistory().stream().count() + " messages):")
+                    .addFile(transcript, transcript.getName())
                     .setEphemeral(true)
                     .queue();
         }
     }
+    @Override
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        if (event.getChannel().getParent().getId().equals(Config.get("SUPPORT-CAT"))) {
+            try {
+                FileWriter writable = new FileWriter(event.getChannel().getName() + ".txt",true);
+                writable.write("\n" + event.getAuthor().getAsTag() + ": " + event.getMessage().getContentDisplay());
+                writable.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }
+        }
 }
