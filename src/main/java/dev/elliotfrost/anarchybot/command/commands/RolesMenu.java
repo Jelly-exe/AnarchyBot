@@ -4,6 +4,7 @@ import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
@@ -15,12 +16,12 @@ public class RolesMenu implements ICommand {
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
 
-        if (!ctx.getMember().getId().equals("278548721778688010")) return;
+        if (!ctx.getMember().hasPermission(Permission.valueOf("ADMINISTRATOR"))) return;
 
         SelectionMenu menu = SelectionMenu.create("menu:roles")
                 .setPlaceholder("Select a role to assign...")
-                .addOption("Testing 1", "1", "Testing UwU", Emoji.fromMarkdown("\uD83D\uDD12"))
-                .addOption("Testing 2", "2", "Testing UwU", Emoji.fromMarkdown("\uD83D\uDD12"))
+                .addOption("Suggestion Ping", "885161612271575060", "Get pinged when someone makes a suggestion!", Emoji.fromUnicode("U+1F9E0"))
+                .addOption("Tester", "879852881681981531", "Gain access to our testing server and help us debug it!", Emoji.fromMarkdown("\uD83D\uDD12"))
                 .build();
 
         MessageEmbed embed = new EmbedBuilder()
