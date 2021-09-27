@@ -23,7 +23,7 @@ public class Suggest implements ICommand {
 
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle("Suggestion from " + ctx.getAuthor().getName(), null)
-                    .setDescription(suggestion)
+                    .setDescription("***\n***" + suggestion + "\n\u200E")
                     .setFooter("Anarchy Bot v2.0 | anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
 
