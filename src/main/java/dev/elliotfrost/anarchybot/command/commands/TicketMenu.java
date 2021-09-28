@@ -4,6 +4,7 @@ import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
@@ -15,7 +16,7 @@ public class TicketMenu implements ICommand {
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
 
-        if (!ctx.getMember().getId().equals("278548721778688010")) return;
+        if (!ctx.getMember().hasPermission(Permission.valueOf("ADMINISTRATOR"))) return;
 
         SelectionMenu menu = SelectionMenu.create("menu:tickets")
                 .setPlaceholder("Select a reason...")

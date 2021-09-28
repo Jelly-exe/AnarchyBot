@@ -21,7 +21,5 @@ public class Bot {
                 .setActivity(Activity.playing("on anarchy.ciputin.cf"))
                 .build();
     }
-    public static void main(String[] args) throws LoginException {
-        Bot bot = new Bot();
-    }
+    public static void main(String[] args) throws LoginException { Bot bot = new Bot(); }
 }
