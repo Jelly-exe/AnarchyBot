@@ -76,7 +76,6 @@ public class Tickets extends ListenerAdapter {
                     br = "testbrusername";
                 }
             }
-            // ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle("New Ticket - Opened by " + user)
                     .setDescription(descr)
@@ -89,8 +88,8 @@ public class Tickets extends ListenerAdapter {
                     .build();
             Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.get("SUPPORT-CAT")))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
+                        .addMemberPermissionOverride(event.getJDA().getSelfUser().getIdLong(), 11280, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
-                        .addRolePermissionOverride(event.getJDA().getSelfUser().getIdLong(), 3072, 0)
                         .setTopic(user + "'s support ticket || They've had " + ticketNum + " ticket(s)")
                         .queue(channel -> {
                             channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).setActionRow(Button.danger("button:close", "Close Ticket"), Button.success("button:transcript", "Generate Transcript")).queue(message -> {
@@ -100,14 +99,14 @@ public class Tickets extends ListenerAdapter {
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
                                     .setEphemeral(true)
                                     .queue();
-                            File transcript = new File(channel.getName() + ".txt");
+                            File transcript = new File("transcripts/" + channel.getName() + ".txt");
                             try {
                                 transcript.createNewFile();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             try {
-                                FileWriter writable = new FileWriter(channel.getName() + ".txt", true);
+                                FileWriter writable = new FileWriter("transcripts/" + channel.getName() + ".txt", true);
                                 writable.append("User Created Support Ticket");
                                 writable.close();
                             } catch (IOException e) {
@@ -123,13 +122,13 @@ public class Tickets extends ListenerAdapter {
     public void onButtonClick(ButtonClickEvent event) {
         if (event.getComponentId().equals("button:close")) {
             event.getGuildChannel().delete().queue();
-                File transc = new File(event.getChannel().getName() + ".txt");
+                File transc = new File("transcripts/" + event.getChannel().getName() + ".txt");
                 transc.delete();
 
         } else if (event.getComponentId().equals("button:transcript")) {
-            File transcript = new File(event.getChannel().getName() + ".txt");
+            File transcript = new File("transcripts/" + event.getChannel().getName() + ".txt");
             event
-                    .reply("Here is your transcript (contains " + event.getChannel().getIterableHistory().stream().count() + " messages):")
+                    .reply("|| Private Message: || Here is your transcript (contains " + event.getChannel().getIterableHistory().stream().count() + " messages):")
                     .addFile(transcript, transcript.getName())
                     .setEphemeral(true)
                     .queue();
@@ -139,7 +138,7 @@ public class Tickets extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (event.getChannel().getParent().getId().equals(Config.get("SUPPORT-CAT"))) {
             try {
-                FileWriter writable = new FileWriter(event.getChannel().getName() + ".txt",true);
+                FileWriter writable = new FileWriter("transcripts/" + event.getChannel().getName() + ".txt",true);
                 writable.write("\n" + event.getAuthor().getAsTag() + ": " + event.getMessage().getContentDisplay());
                 writable.close();
             } catch (IOException e) {
