@@ -26,3 +26,5 @@ hs_err_pid*
 .gradle/*
 .env
 build/*
+/src/main/java/META-INF/MANIFEST.MF
+/out/production/resources/logback.xml

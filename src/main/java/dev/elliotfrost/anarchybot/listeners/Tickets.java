@@ -87,10 +87,10 @@ public class Tickets extends ListenerAdapter {
                     .setThumbnail("https://i.imgur.com/i4ht6nZ.png")
                     .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
-
             Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.get("SUPPORT-CAT")))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
+                        .addRolePermissionOverride(event.getJDA().getSelfUser().getIdLong(), 3072, 0)
                         .setTopic(user + "'s support ticket || They've had " + ticketNum + " ticket(s)")
                         .queue(channel -> {
                             channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).setActionRow(Button.danger("button:close", "Close Ticket"), Button.success("button:transcript", "Generate Transcript")).queue(message -> {
