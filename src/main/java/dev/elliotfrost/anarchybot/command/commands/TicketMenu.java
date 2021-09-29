@@ -35,6 +35,7 @@ public class TicketMenu implements ICommand {
 
 
         ctx.getChannel().sendMessageEmbeds(embed).setActionRow(menu).queue();
+        ctx.getChannel().deleteMessageById(ctx.getMessage().getId()).queue();
     }
 
     @Override
