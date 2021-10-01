@@ -84,7 +84,7 @@ public class Tickets extends ListenerAdapter {
                     .setTimestamp(Instant.now())
                     .setColor(color)
                     .setThumbnail("https://i.imgur.com/i4ht6nZ.png")
-                    .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
+                    .setFooter("Anarchy Bot v2.0 | anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
             Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.get("SUPPORT-CAT")))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)

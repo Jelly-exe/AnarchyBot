@@ -29,7 +29,7 @@ public class TicketMenu implements ICommand {
         MessageEmbed embed = new EmbedBuilder()
                 .setTitle("Support Ticket", null)
                 .setDescription("To open a ticket, please select one of the options from the dropdown below.\n")
-                .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
+                .setFooter("Anarchy Bot v2.0 | anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                 .build();
 
 

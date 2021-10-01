@@ -27,7 +27,7 @@ public class RolesMenu implements ICommand {
         MessageEmbed embed = new EmbedBuilder()
                 .setTitle("Role Selection", null)
                 .setDescription("To get roles, select one of the options below.")
-                .setFooter("Anarchy Bot v2.0 | skynodeanarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
+                .setFooter("Anarchy Bot v2.0 | anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                 .build();
 
         ctx.getChannel().sendMessageEmbeds(embed).setActionRow(menu).queue();
