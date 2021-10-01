@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.mattmalec:Pterodactyl4J:2.BETA_80'
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
-    compile 'com.google.api-client:google-api-client:1.32.1'
+    implementation('com.google.api-client:google-api-client:1.32.1')
 }
 
 test {
