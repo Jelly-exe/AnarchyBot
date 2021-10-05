@@ -21,9 +21,23 @@ public class Config {
     }
     public static String getToken() {
         if (Objects.equals(dotenv.get("DEV"), "true")) {
-            return dotenv.get("DEV_TOKEN");
+            return dotenv.get("DEV-TOKEN");
         } else {
-            return dotenv.get("BOT_TOKEN");
+            return dotenv.get("BOT-TOKEN");
+        }
+    }
+    public static String getSugg() {
+        if (Objects.equals(dotenv.get("DEV"), "true")) {
+            return dotenv.get("DEV-SUGGESTIONS-CHANNEL");
+        } else {
+            return dotenv.get("BOT-SUGGESTIONS-CHANNEL");
+        }
+    }
+    public static String getSupp() {
+        if (Objects.equals(dotenv.get("DEV"), "true")) {
+            return dotenv.get("DEV-SUPPORT-CAT");
+        } else {
+            return dotenv.get("BOT-SUPPORT-CAT");
         }
     }
 }

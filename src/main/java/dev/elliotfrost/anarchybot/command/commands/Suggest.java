@@ -19,7 +19,7 @@ public class Suggest implements ICommand {
             ctx.getChannel().sendMessage("You cannot send a blank suggestion!").queue();
         } else {
             System.out.println("Suggestion Made:" + suggestion);
-            TextChannel channel = jda.getTextChannelById(Config.get("SUGGESTIONS_CHANNEL"));
+            TextChannel channel = jda.getTextChannelById(Config.getSugg());
 
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle("Suggestion from " + ctx.getAuthor().getName(), null)

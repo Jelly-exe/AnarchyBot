@@ -86,7 +86,7 @@ public class Tickets extends ListenerAdapter {
                     .setThumbnail("https://i.imgur.com/i4ht6nZ.png")
                     .setFooter("Anarchy Bot v2.0 | anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
                     .build();
-            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.get("SUPPORT-CAT")))
+            Objects.requireNonNull(event.getGuild()).createTextChannel(user + "-" + ticketNum, event.getGuild().getCategoryById(Config.getSupp()))
                         .addMemberPermissionOverride(event.getUser().getIdLong(), 3072, 0)
                         .addMemberPermissionOverride(event.getJDA().getSelfUser().getIdLong(), 11280, 0)
                         .addRolePermissionOverride(Objects.requireNonNull(event.getGuild().getRoleById("866757654244622366")).getIdLong(), 0 ,3072)
@@ -136,7 +136,7 @@ public class Tickets extends ListenerAdapter {
     }
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getChannel().getParent().getId().equals(Config.get("SUPPORT-CAT"))) {
+        if (event.getChannel().getParent().getId().equals(Config.getSupp())) {
             try {
                 FileWriter writable = new FileWriter("transcripts/" + event.getChannel().getName() + ".txt",true);
                 writable.write("\n" + event.getAuthor().getAsTag() + ": " + event.getMessage().getContentDisplay());
