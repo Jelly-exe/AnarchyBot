@@ -19,5 +19,11 @@ public class Config {
             return dotenv.get("PREFIX");
         }
     }
-
+    public static String getToken() {
+        if (Objects.equals(dotenv.get("DEV"), "true")) {
+            return dotenv.get("DEV_TOKEN");
+        } else {
+            return dotenv.get("BOT_TOKEN");
+        }
+    }
 }
