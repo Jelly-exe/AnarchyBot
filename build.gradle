@@ -1,17 +1,13 @@
-apply plugin: 'java'
-
-group 'dev.elliotfrost.anarchybot'
-version ''
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'dev.elliotfrost.anarchybot.Bot'
-    }
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'java'
 }
+
 
 repositories {
     google()
     mavenCentral()
+    mavenLocal()
     maven {
         url 'https://m2.dv8tion.net/releases'
     }
@@ -26,27 +22,20 @@ repositories {
     }
 }
 
-dependencies {
-    implementation('net.dv8tion:JDA:4.3.0_324')
-    implementation('com.google.code.gson:gson:2.8.8')
-    implementation('io.github.cdimascio:dotenv-java:2.2.0')
-    implementation group: 'me.duncte123', name: 'botCommons', version: '2.3.8'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
-    implementation 'com.mattmalec:Pterodactyl4J:2.BETA_80'
-    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
-    implementation('com.google.api-client:google-api-client:1.32.1')
-
-    compileOnly('net.dv8tion:JDA:4.3.0_324')
-    compileOnly('io.github.cdimascio:dotenv-java:2.2.0')
-    compileOnly("me.duncte123:botCommons:2.3.8")
-    compileOnly("ch.qos.logback:logback-classic:1.2.6")
-    compileOnly('com.mattmalec:Pterodactyl4J:2.BETA_80')
-    compileOnly("com.zaxxer:HikariCP:5.0.0")
-    compileOnly("mysql:mysql-connector-java:8.0.26")
-    compileOnly('com.google.api-client:google-api-client:1.32.1')
+jar {
+    manifest {
+        attributes 'Main-Class': 'dev.elliotfrost.anarchybot.Bot'
+    }
 }
 
-test {
-    useJUnitPlatform()
+
+dependencies {
+    implementation 'net.dv8tion:JDA:4.3.0_324'
+    implementation 'io.github.cdimascio:dotenv-java:2.2.0'
+    implementation "me.duncte123:botCommons:2.3.8"
+    implementation "ch.qos.logback:logback-classic:1.2.5"
+    implementation 'com.mattmalec:Pterodactyl4J:2.BETA_80'
+    implementation "com.zaxxer:HikariCP:5.0.0"
+    implementation "mysql:mysql-connector-java:8.0.26"
+    implementation 'com.google.api-client:google-api-client:1.32.1'
 }
