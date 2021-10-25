@@ -64,7 +64,7 @@ public class Tickets extends ListenerAdapter {
                     br = "testbrusername";
                 }
                 case "support" -> {
-                    color = Color.GREEN;
+                    color = Color.BLUE;
                     descr = "General Support";
                     java = "testjavausername";
                     br = "testbrusername";
@@ -113,8 +113,7 @@ public class Tickets extends ListenerAdapter {
                                 e.printStackTrace();
                             }
                         });
-                // DB Code for adding a ticket to user's total here
-                // DB code for getting a user's info (linked accts etc)
+            Bot.getDatabaseManager().getDatabaseTickets().postNewTicket(event.getUser().getId(), event.getChannel().getId(), event.getValues().get(0));
         }
     }
 
@@ -122,8 +121,6 @@ public class Tickets extends ListenerAdapter {
     public void onButtonClick(ButtonClickEvent event) {
         if (event.getComponentId().equals("button:close")) {
             event.getGuildChannel().delete().queue();
-                File transc = new File("transcripts/" + event.getChannel().getName() + ".txt");
-                transc.delete();
 
         } else if (event.getComponentId().equals("button:transcript")) {
             File transcript = new File("transcripts/" + event.getChannel().getName() + ".txt");
