@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 public class Tickets extends ListenerAdapter {
@@ -94,6 +93,7 @@ public class Tickets extends ListenerAdapter {
                         .queue(channel -> {
                             channel.sendMessage("<@" + event.getUser().getId() + "> <@&867133159137214514>").setEmbeds(embed).setActionRow(Button.danger("button:close", "Close Ticket"), Button.success("button:transcript", "Generate Transcript")).queue(message -> {
                                     channel.pinMessageById(message.getId()).queue();
+                            Bot.getDatabaseManager().getDatabaseTickets().postNewTicket(event.getUser().getId(), channel.getId(), event.getValues().get(0));
                                     }
                             );
                             event.reply("Your ticket is: <#" + channel.getId() + ">")
@@ -113,7 +113,6 @@ public class Tickets extends ListenerAdapter {
                                 e.printStackTrace();
                             }
                         });
-            Bot.getDatabaseManager().getDatabaseTickets().postNewTicket(event.getUser().getId(), event.getChannel().getId(), event.getValues().get(0));
         }
     }
 
