@@ -29,11 +29,12 @@ public class DatabaseTickets {
         return 0;
     }
     public boolean postNewTicket(String authorId, String ChannelID, String reason) {
+        int ticketnum = Bot.getDatabaseManager().getDatabaseTickets().getTicketNumber(authorId);
         long unixTime = System.currentTimeMillis() / 1000L;
         try {
             Connection connection = this.ds.getConnection();
             Statement statement = connection.createStatement();
-            boolean resultSet = statement.execute(String.format("INSERT INTO Tickets (authorId, channelId, reason, timeOpened) VALUES ('%s', '%s', '%s', '%o')", authorId, ChannelID, reason, unixTime));
+            boolean resultSet = statement.execute(String.format("INSERT INTO Tickets (id, authorId, channelId, reason, timeOpened) VALUES ('%x', '%s', '%s', '%s', '%o')", ticketnum, authorId, ChannelID, reason, unixTime));
 
             connection.close();
             return resultSet;
