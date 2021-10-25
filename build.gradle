@@ -31,12 +31,11 @@ dependencies {
     implementation('com.google.code.gson:gson:2.8.8')
     implementation('io.github.cdimascio:dotenv-java:2.2.0')
     implementation group: 'me.duncte123', name: 'botCommons', version: '2.3.8'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.6'
     implementation 'com.mattmalec:Pterodactyl4J:2.BETA_80'
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
-    implementation('com.google.api-client:google-api-client:1.32.1')
-
+    implementation('com.google.api-client:google-api-client:1.32.2')
     compileOnly('net.dv8tion:JDA:4.3.0_324')
     compileOnly('io.github.cdimascio:dotenv-java:2.2.0')
     compileOnly("me.duncte123:botCommons:2.3.8")
@@ -44,7 +43,8 @@ dependencies {
     compileOnly('com.mattmalec:Pterodactyl4J:2.BETA_80')
     compileOnly("com.zaxxer:HikariCP:5.0.0")
     compileOnly("mysql:mysql-connector-java:8.0.26")
-    compileOnly('com.google.api-client:google-api-client:1.32.1')
+    compileOnly('com.google.api-client:google-api-client:1.32.2')
+    implementation('com.coreoz:wisp:2.2.1')
 }
 
 test {
