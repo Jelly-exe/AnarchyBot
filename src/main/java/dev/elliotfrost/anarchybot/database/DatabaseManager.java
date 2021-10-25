@@ -9,6 +9,7 @@ public class DatabaseManager {
 
     private static DatabaseTickets databaseTickets;
     private static DatabaseToDo databaseToDo;
+    private static DatabaseUser databaseUser;
     private final HikariDataSource ds;
 
     public DatabaseManager() {
@@ -21,10 +22,12 @@ public class DatabaseManager {
 
         databaseTickets = new DatabaseTickets(ds);
         databaseToDo = new DatabaseToDo(ds);
+        databaseUser = new DatabaseUser(ds);
     }
 
     public DatabaseTickets getDatabaseTickets() {
         return databaseTickets;
     }
     public DatabaseToDo getDatabaseToDo() { return databaseToDo; }
+    public DatabaseUser getDatabaseUser() { return databaseUser; }
 }
