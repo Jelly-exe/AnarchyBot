@@ -5,11 +5,16 @@ import dev.elliotfrost.anarchybot.listeners.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import javax.security.auth.login.LoginException;
 
 public class Bot {
     private static DatabaseManager databaseManager = new DatabaseManager();
+    private static JDA jda;
+
 
     public static DatabaseManager getDatabaseManager() {
         return databaseManager;
@@ -32,4 +37,6 @@ public class Bot {
         this.jda = jda;
     }
     public static void main(String[] args) throws LoginException { Bot bot = new Bot(); }
+
+    public static JDA getJDA() { return jda; }
 }
