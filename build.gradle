@@ -4,7 +4,7 @@ group 'dev.elliotfrost.anarchybot'
 version ''
 
 jar {
-    manifest {
+    manifest{
         attributes 'Main-Class': 'dev.elliotfrost.anarchybot.Bot'
     }
 }
@@ -36,6 +36,8 @@ dependencies {
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
     implementation('com.google.api-client:google-api-client:1.32.2')
+    implementation('com.coreoz:wisp:2.2.1')
+    compileOnly('com.coreoz:wisp:2.2.1')
     compileOnly('net.dv8tion:JDA:4.3.0_324')
     compileOnly('io.github.cdimascio:dotenv-java:2.2.0')
     compileOnly("me.duncte123:botCommons:2.3.8")
@@ -44,7 +46,6 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP:5.0.0")
     compileOnly("mysql:mysql-connector-java:8.0.26")
     compileOnly('com.google.api-client:google-api-client:1.32.2')
-    implementation('com.coreoz:wisp:2.2.1')
 }
 
 test {
