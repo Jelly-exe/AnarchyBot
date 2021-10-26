@@ -23,6 +23,8 @@ public class DatabaseUser {
 
             connection.close();
 
+            System.out.println("Tried to link Java");
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -36,7 +38,7 @@ public class DatabaseUser {
             statement.setString(2,userid);
             statement.execute();
             connection.close();
-
+            System.out.println("Tried to link Bedrock");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -61,8 +63,9 @@ public class DatabaseUser {
             Connection connection = this.ds.getConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE userid = ?");
             statement.setString(1,userid);
-            boolean st = statement.execute();
-
+            statement.execute();
+            boolean st = statement.getResultSet().getString(2) != null;
+            System.out.println(statement.getResultSet().getString(2) + " (Checked if a user exists): " + st);
             connection.close();
             return st;
         } catch (SQLException throwables) {
@@ -73,10 +76,11 @@ public class DatabaseUser {
     public void addUser(String userid) {
         try {
             Connection connection = this.ds.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO User (userid) VALUE ?");
-            statement.setString(1,userid);
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO User (id, userid, java, bedrock) VALUES (NULL, ? ,NULL, NULL)");
+            statement.setString(1, userid);
             statement.execute();
             connection.close();
+            System.out.println("Supposed to have Inserted a user");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
