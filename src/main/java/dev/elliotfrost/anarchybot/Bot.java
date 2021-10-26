@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import javax.security.auth.login.LoginException;
 
 public class Bot {
-    private static DatabaseManager databaseManager = new DatabaseManager();
+    private static final DatabaseManager databaseManager = new DatabaseManager();
     private static JDA jda;
 
 
@@ -25,7 +25,6 @@ public class Bot {
                 .addEventListeners(new Autorole(), new Listener(), new CommandManager(), new Tickets(), new Suggestions(), new Roles(), new SlashCommands())
                 .setActivity(Activity.playing("on anarchy.ciputin.cf"))
                 .build();
-        if (!jda.retrieveCommands().complete().contains("link")) {
             SubcommandData java = new SubcommandData("java", "Link your Java Minecraft Account!")
                     .addOption(OptionType.STRING, "username", "Your minecraft username", true);
             SubcommandData bedrock = new SubcommandData("bedrock", "Link your Bedrock Minecraft Account!")
@@ -34,8 +33,8 @@ public class Bot {
                     .addSubcommands(java, bedrock);
             jda.updateCommands().complete();
             jda.updateCommands().addCommands(link).complete();
-        }
-        this.jda = jda;
+
+            Bot.jda = jda;
     }
     public static void main(String[] args) throws LoginException { Bot bot = new Bot(); }
 

@@ -54,13 +54,10 @@ public class ServerStatus implements Runnable {
     }
     public void newStatuses() {
         /* Delete old Messages */
-        List<Message> old = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))
-                .getHistory()
-                .retrievePast(100)
-                .complete();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))
-                .deleteMessages(old)
-                .complete();
+            List<Message> old = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))
+                    .getHistory()
+                    .retrievePast(100)
+                    .complete();
         /* Send new messages */
         Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("BungeeCord:").complete();
         Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("Anarchy:").complete();
@@ -71,7 +68,6 @@ public class ServerStatus implements Runnable {
         List<Message> messages = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).getIterableHistory().limit(4).complete();
 
         /* save history */
-        new File("status-messages.txt");
         try {
             FileWriter myWriter = new FileWriter("status-messages.txt");
             for (int i = 0, messagesSize = messages.size(); i < messagesSize; i++) {
@@ -82,6 +78,9 @@ public class ServerStatus implements Runnable {
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+        }
+        for (Message message : old) {
+            Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).deleteMessageById(message.getId()).complete();
         }
     }
 
