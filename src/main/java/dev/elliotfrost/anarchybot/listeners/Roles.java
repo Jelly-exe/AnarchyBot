@@ -1,7 +1,6 @@
 package dev.elliotfrost.anarchybot.listeners;
 
 import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -9,8 +8,6 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class Roles extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Roles.class);
