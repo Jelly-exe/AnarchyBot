@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 public class Tickets extends ListenerAdapter {
@@ -46,40 +47,33 @@ public class Tickets extends ListenerAdapter {
 
             String user = event.getUser().getName() + "#" + event.getUser().getDiscriminator();
 
-            String title, descr, java, br, icon;
+            List<String> accounts = Bot.getDatabaseManager().getDatabaseUser().getAccounts(event.getUser().getId());
+            String descr;
             Color color;
 
             switch (event.getValues().get(0)) {
                 case "bug" -> {
                     color = Color.RED;
                     descr = "A bug report";
-                    java = "testjavausername";
-                    br = "testbrusername";
                 }
                 case "report" -> {
                     color = Color.lightGray;
                     descr = "A Player report";
-                    java = "testjavausername";
-                    br = "testbrusername";
                 }
                 case "support" -> {
                     color = Color.BLUE;
                     descr = "General Support";
-                    java = "testjavausername";
-                    br = "testbrusername";
                 }
                 default -> {
                     color = Color.GREEN;
                     descr = "Other things you may need to talk to the admin for";
-                    java = "testjavausername";
-                    br = "testbrusername";
                 }
             }
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle("New Ticket - Opened by " + user)
                     .setDescription(descr)
-                    .addField("Java IGN:", java, true)
-                    .addField("Bedrock IGN:", br, true)
+                    .addField("Java IGN:", accounts.get(0), true)
+                    .addField("Bedrock IGN:", accounts.get(1), true)
                     .setTimestamp(Instant.now())
                     .setColor(color)
                     .setThumbnail("https://i.imgur.com/i4ht6nZ.png")

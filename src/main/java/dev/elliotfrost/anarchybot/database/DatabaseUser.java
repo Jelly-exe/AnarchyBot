@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseUser {
     private final DataSource ds;
@@ -44,19 +46,23 @@ public class DatabaseUser {
             throwables.printStackTrace();
         }
     }
-    public String getAccounts(String userid) {
-        String accounts = null;
+    public List<String> getAccounts(String userid) {
+        List<String> accounts = new ArrayList<>();
         try {
             Connection connection = this.ds.getConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE userid = ?");
             statement.setString(1,userid);
-            statement.executeQuery().last();
-            System.out.print(statement);
+            ResultSet results = statement.executeQuery();
+            if (results.next()) {
+                accounts.add(results.getString(3));
+                accounts.add(results.getString(4));
+            } else {
+                System.out.println("ERR: UserNotFound in DB");
+            }
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        assert accounts != null;
         return accounts;
     }
     public boolean checkIfUserExists(String userid) {
