@@ -3,6 +3,7 @@ package dev.elliotfrost.anarchybot.database;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseUser {
@@ -63,11 +64,11 @@ public class DatabaseUser {
             Connection connection = this.ds.getConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE userid = ?");
             statement.setString(1,userid);
-            statement.execute();
-            boolean st = statement.getResultSet().getString(2) != null;
-            System.out.println(statement.getResultSet().getString(2) + " (Checked if a user exists): " + st);
+            ResultSet rest = statement.executeQuery();
+            boolean exists = rest.next();
+            System.out.println(exists + " (Checked if a user exists): ");
             connection.close();
-            return st;
+            return exists;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
