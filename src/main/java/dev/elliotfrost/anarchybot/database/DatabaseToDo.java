@@ -23,4 +23,14 @@ public class DatabaseToDo {
             throwables.printStackTrace();
         }
     }
+    public void postToDo(String channelId, String Task) {
+        try {
+            Connection connection = this.ds.getConnection();
+            PreparedStatement statement = connection.prepareStatement(String.format("SELECT * FROM ToDo WHERE channelId = %s", channelId), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet result = statement.executeQuery();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

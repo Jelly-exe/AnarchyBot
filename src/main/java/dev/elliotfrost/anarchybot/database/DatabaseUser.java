@@ -11,21 +11,9 @@ public class DatabaseUser {
     public DatabaseUser(DataSource ds) {
         this.ds = ds;
     }
-    public void newUser(String userid) {
-        try {
-            Connection connection = this.ds.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO User (userid) VALUE ?");
-            statement.setString(1,userid);
-            statement.execute();
-
-            connection.close();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
 
     public void linkJava(String userid, String username) {
+        if (!checkIfUserExists(userid)) { addUser(userid); }
         try {
             Connection connection = this.ds.getConnection();
             PreparedStatement statement = connection.prepareStatement("UPDATE User SET java = ? WHERE userid = ?");
@@ -40,6 +28,7 @@ public class DatabaseUser {
         }
     }
     public void linkBedrock(String userid, String username) {
+        if (!checkIfUserExists(userid)) { addUser(userid); }
         try {
             Connection connection = this.ds.getConnection();
             PreparedStatement statement = connection.prepareStatement("UPDATE User SET bedrock = ? WHERE userid = ?");
@@ -64,6 +53,32 @@ public class DatabaseUser {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        assert accounts != null;
         return accounts;
+    }
+    public boolean checkIfUserExists(String userid) {
+        try {
+            Connection connection = this.ds.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE userid = ?");
+            statement.setString(1,userid);
+            boolean st = statement.execute();
+
+            connection.close();
+            return st;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+    public void addUser(String userid) {
+        try {
+            Connection connection = this.ds.getConnection();
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO User (userid) VALUE ?");
+            statement.setString(1,userid);
+            statement.execute();
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

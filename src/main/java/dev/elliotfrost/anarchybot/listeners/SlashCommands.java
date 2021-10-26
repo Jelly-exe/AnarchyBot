@@ -35,12 +35,14 @@ public class SlashCommands extends ListenerAdapter {
                         }
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + Objects.requireNonNull(event.getSubcommandName()));
+                        System.out.println(Objects.requireNonNull(event.getSubcommandName()) + " Unexpected interaction");
                 }
                 String reply;
                 if (successful) { reply = "Linking was successful!"; } else { reply = "Linking was unsuccessful, please make a ticket!"; }
                 event.reply(reply).setEphemeral(true).queue();
                 break;
+            default:
+                System.out.println(Objects.requireNonNull(event.getCommandString()) + " Unexpected Interaction");
         }
     }
 }

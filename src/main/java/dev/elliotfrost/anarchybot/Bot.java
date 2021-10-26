@@ -31,8 +31,8 @@ public class Bot {
                 .addOption(OptionType.STRING,"username", "Your minecraft username", true);
         CommandData link = new CommandData("link","Link your minecraft accounts!")
                 .addSubcommands(java, bedrock);
-
-        jda.upsertCommand(link).complete();
+        jda.updateCommands().complete();
+        jda.updateCommands().addCommands(link).queue();
 
         this.jda = jda;
     }
