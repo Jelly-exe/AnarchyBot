@@ -23,7 +23,6 @@ public class CommandManager extends ListenerAdapter {
         addCommand(new Help());
         addCommand(new TicketMenu());
         addCommand(new Suggest());
-        addCommand(new Testing());
         addCommand(new Clean());
         addCommand(new Clean2());
         addCommand(new RolesMenu());
