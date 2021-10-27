@@ -24,8 +24,15 @@ public class Roles extends ListenerAdapter {
                     .build();
 
             Role role = event.getGuild().getRoleById(event.getValues().get(0));
-            event.getGuild().addRoleToMember(event.getUser().getId(), role).queue();
-            event.getMessage().editMessageComponents(ActionRow.of(menu)).queue(message -> event.reply("You now have the role: " + role.getName()).setEphemeral(true).queue());
+            String reply;
+            if (event.getGuild().retrieveMember(event.getUser()).complete().getRoles().contains(role)) {
+                event.getGuild().removeRoleFromMember(event.getUser().getId(),role).queue();
+                reply = "I removed the role: " + role.getName();
+            } else {
+                event.getGuild().addRoleToMember(event.getUser().getId(), role).queue();
+                reply = "You now have the role: " + role.getName();
+            }
+            event.getMessage().editMessageComponents(ActionRow.of(menu)).queue(message -> event.reply(reply).setEphemeral(true).queue());
         }
     }
 }
