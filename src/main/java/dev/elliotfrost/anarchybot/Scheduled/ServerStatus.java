@@ -52,6 +52,7 @@ public class ServerStatus implements Runnable {
         AnarchyStatus();
         LobbyStatus();
         SMPStatus();
+        System.gc();
     }
     public void newStatuses() {
         if (Config.get("DEV").equals("true")) {return;}
