@@ -27,6 +27,7 @@ public class CommandManager extends ListenerAdapter {
         addCommand(new Clean2());
         addCommand(new RolesMenu());
         addCommand(new Cmd());
+        addCommand(new afk());
     }
 
     private void addCommand(ICommand cmd) {
