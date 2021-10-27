@@ -14,12 +14,13 @@ public class Autorole extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
-        if (event.getUser().isBot() == false) {
-            Role role = event.getGuild().getRoleById("875032095561482270");
-            event.getGuild().addRoleToMember(event.getMember().getId(), role);
-        } else if (event.getUser().isBot() == true) {
-            Role bot = event.getGuild().getRoleById("866762499088318535");
-            event.getGuild().addRoleToMember(event.getMember().getId(), bot);
+        Role role;
+        if (!event.getUser().isBot()) {
+            role = event.getGuild().getRoleById("875032095561482270");
+            event.getGuild().addRoleToMember(event.getMember().getId(), role).complete();
+        } else if (event.getUser().isBot()) {
+            role = event.getGuild().getRoleById("866762499088318535");
+            event.getGuild().addRoleToMember(event.getMember().getId(), role).complete();
         }
     }
 }
