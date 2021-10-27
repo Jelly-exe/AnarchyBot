@@ -18,6 +18,6 @@ public class Listener extends ListenerAdapter {
     public void onReady(ReadyEvent event) {
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
         new ServerStatus().newStatuses();
-        new Scheduler().schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(2)));
+        new Scheduler().schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(10)));
     }
 }
