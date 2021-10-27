@@ -47,12 +47,14 @@ public class ServerStatus implements Runnable {
 
     @Override
     public void run() {
+        if (Config.get("DEV").equals("true")) {return;}
         BungeeStatus();
         AnarchyStatus();
         LobbyStatus();
         SMPStatus();
     }
     public void newStatuses() {
+        if (Config.get("DEV").equals("true")) {return;}
         /* Delete old Messages */
             List<Message> old = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))
                     .getHistory()
