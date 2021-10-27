@@ -1,6 +1,7 @@
 package dev.elliotfrost.anarchybot.listeners;
 
 import com.coreoz.wisp.Scheduler;
+import com.coreoz.wisp.SchedulerConfig;
 import com.coreoz.wisp.schedule.Schedules;
 import dev.elliotfrost.anarchybot.Scheduled.ServerStatus;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -18,6 +19,11 @@ public class Listener extends ListenerAdapter {
     public void onReady(ReadyEvent event) {
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
         new ServerStatus().newStatuses();
-        new Scheduler().schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(10)));
+        new Scheduler(
+                SchedulerConfig
+                        .builder()
+                        .maxThreads(4)
+                        .build()
+        ).schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(10)));
     }
 }
