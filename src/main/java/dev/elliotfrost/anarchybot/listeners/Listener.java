@@ -22,7 +22,9 @@ public class Listener extends ListenerAdapter {
         new Scheduler(
                 SchedulerConfig
                         .builder()
-                        .maxThreads(4)
+                        .minThreads(1)
+                        .maxThreads(2)
+                        .threadsKeepAliveTime(Duration.ofSeconds(5))
                         .build()
         ).schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(10)));
     }
