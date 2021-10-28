@@ -70,7 +70,7 @@ public class ServerStatus implements Runnable {
         Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA()
                                 .getGuildById(Config.get("GUILD-ID")))
                         .getTextChannelById(Config.get("STATUS-CHANNEL")))
-                .editMessageById(messages.get(0), String.format("Statuses (last updated %s):", Instant.now().getEpochSecond()))
+                .editMessageById(messages.get(0), String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
                 .setEmbeds(Anarchy, Bungee, Lobby, SMP)
                 .complete();
     }
