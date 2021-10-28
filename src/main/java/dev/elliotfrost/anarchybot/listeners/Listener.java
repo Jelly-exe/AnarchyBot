@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
@@ -18,6 +19,12 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Give JDA time to finish loading before execution of statuses
         new ServerStatus().newStatuses();
         new Scheduler(
                 SchedulerConfig
