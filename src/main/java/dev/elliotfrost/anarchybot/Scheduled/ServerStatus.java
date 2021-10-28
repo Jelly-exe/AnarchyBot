@@ -14,17 +14,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ServerStatus implements Runnable {
 
-    public void BungeeStatus() {
+    @Override
+    public void run() {
+        if (Config.get("DEV").equals("true")) {return;}
         ArrayList<String> messages = new ArrayList<>();
         PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        UtilizationState Powerstate = api.retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        // Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))).editMessageById().queue();
+        UtilizationState Powerstate_SMP = api.retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_ANARCHY = api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_LOBBY = api.retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_BUNGEE = api.retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).execute().retrieveUtilization().execute().getState();
         try {
             File myObj = new File("status-messages.txt");
             Scanner myReader = new Scanner(myObj);
@@ -36,45 +42,56 @@ public class ServerStatus implements Runnable {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Status: " + Powerstate.toString())
-                .setDescription("The server that you actually connect to!")
+        MessageEmbed Anarchy = new EmbedBuilder()
+                .setTitle("Status: " + Powerstate_ANARCHY)
+                .setDescription("The ANARCHY Server!")
                 .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate))
+                .setColor(Determinestatecolor(Powerstate_ANARCHY))
                 .build();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).editMessageEmbedsById(messages.get(3), embed).queue();
-    }
+        MessageEmbed Bungee = new EmbedBuilder()
+                .setTitle("Status: " + Powerstate_BUNGEE)
+                .setDescription("The Bungee Server!")
+                .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
+                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .build();
+        MessageEmbed Lobby = new EmbedBuilder()
+                .setTitle("Status: " + Powerstate_LOBBY)
+                .setDescription("The Lobby Server!")
+                .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
+                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .build();
+        MessageEmbed SMP = new EmbedBuilder()
+                .setTitle("Status: " + Powerstate_SMP)
+                .setDescription("The SMP Server!")
+                .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
+                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .build();
 
-    @Override
-    public void run() {
-        if (Config.get("DEV").equals("true")) {return;}
-        BungeeStatus();
-        AnarchyStatus();
-        LobbyStatus();
-        SMPStatus();
+        Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA()
+                                .getGuildById(Config.get("GUILD-ID")))
+                        .getTextChannelById(Config.get("STATUS-CHANNEL")))
+                .editMessageById(messages.get(0), String.format("Statuses (last updated %s):", Instant.now().getEpochSecond()))
+                .setEmbeds(Anarchy, Bungee, Lobby, SMP)
+                .complete();
     }
     public void newStatuses() {
         if (Config.get("DEV").equals("true")) {return;}
         /* Delete old Messages */
-            List<Message> old = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))
+            List<Message> old = Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL")))
                     .getHistory()
                     .retrievePast(100)
                     .complete();
         /* Send new messages */
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("BungeeCord:").complete();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("Anarchy:").complete();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("Lobby:").complete();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).sendMessage("SMP:").complete();
+        Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL"))).sendMessage("Statuses:").complete();
 
         /* Get history of said messages */
-        List<Message> messages = Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).getIterableHistory().limit(4).complete();
+        List<Message> messages = Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL"))).getIterableHistory().limit(4).complete();
 
         /* save history */
         try {
             FileWriter myWriter = new FileWriter("status-messages.txt");
-            for (int i = 0, messagesSize = messages.size(); i < messagesSize; i++) {
-                Message message = messages.get(i);
-                myWriter.append(message.getId() + "\n");
+            for (Message message : messages) {
+                myWriter.append(message.getId()).append("\n");
             }
             myWriter.close();
         } catch (IOException e) {
@@ -82,85 +99,11 @@ public class ServerStatus implements Runnable {
             e.printStackTrace();
         }
         for (Message message : old) {
-            Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).deleteMessageById(message.getId()).complete();
+            Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL"))).deleteMessageById(message.getId()).complete();
         }
     }
 
-    public void LobbyStatus() {
-        ArrayList<String> messages = new ArrayList<>();
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        UtilizationState Powerstate = api.retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        // Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))).editMessageById().queue();
-        try {
-            File myObj = new File("status-messages.txt");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                messages.add(myReader.nextLine());
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Status: " + Powerstate.toString())
-                .setDescription("The server that you connect to on join!")
-                .setFooter("anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate))
-                .build();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).editMessageEmbedsById(messages.get(1), embed).queue();
-    }
-
-    public void AnarchyStatus() {
-        ArrayList<String> messages = new ArrayList<>();
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        UtilizationState Powerstate = api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        // Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))).editMessageById().queue();
-        try {
-            File myObj = new File("status-messages.txt");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                messages.add(myReader.nextLine());
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Status: " + Powerstate.toString())
-                .setDescription("The main event :smiling_imp:")
-                .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate))
-                .build();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).editMessageEmbedsById(messages.get(2), embed).queue();
-    }
-
-    public void SMPStatus() {
-        ArrayList<String> messages = new ArrayList<>();
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        UtilizationState Powerstate = api.retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        // Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL"))).editMessageById().queue();
-        try {
-            File myObj = new File("status-messages.txt");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                messages.add(myReader.nextLine());
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Status: " + Powerstate.toString())
-                .setDescription("The SMP Server!")
-                .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate))
-                .build();
-        Bot.getJDA().getGuildById(Config.get("GUILD-ID")).getTextChannelById(Config.get("STATUS-CHANNEL")).editMessageEmbedsById(messages.get(0), embed).queue();
-    }
     private Color Determinestatecolor(UtilizationState Powerstate) {
-        if (String.valueOf(Powerstate) != "RUNNING") { return Color.RED; } else { return Color.blue; }
+        if (!String.valueOf(Powerstate).equals("RUNNING")) { return Color.RED; } else { return Color.blue; }
     }
 }
