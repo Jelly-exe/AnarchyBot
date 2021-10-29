@@ -1,8 +1,6 @@
 package dev.elliotfrost.anarchybot.Scheduled;
 
-import com.mattmalec.pterodactyl4j.PteroBuilder;
 import com.mattmalec.pterodactyl4j.UtilizationState;
-import com.mattmalec.pterodactyl4j.client.entities.PteroClient;
 import dev.elliotfrost.anarchybot.Bot;
 import dev.elliotfrost.anarchybot.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -22,16 +20,14 @@ import java.util.Scanner;
 
 public class ServerStatus implements Runnable {
 
-    private PteroClient api;
-
     @Override
     public void run() {
         if (Config.get("DEV").equals("true")) {return;}
         ArrayList<String> messages = new ArrayList<>();
-        UtilizationState Powerstate_SMP = api.retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_ANARCHY = api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_LOBBY = api.retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_BUNGEE = api.retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_SMP = Bot.getP4J().retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_ANARCHY = Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_LOBBY = Bot.getP4J().retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_BUNGEE = Bot.getP4J().retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).execute().retrieveUtilization().execute().getState();
         try {
             File myObj = new File("status-messages.txt");
             Scanner myReader = new Scanner(myObj);
@@ -102,8 +98,6 @@ public class ServerStatus implements Runnable {
         for (Message message : old) {
             Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL"))).deleteMessageById(message.getId()).complete();
         }
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-        this.api = api;
     }
 
     private Color Determinestatecolor(UtilizationState Powerstate) {

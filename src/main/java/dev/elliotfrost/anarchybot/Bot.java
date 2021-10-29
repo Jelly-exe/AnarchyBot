@@ -1,5 +1,7 @@
 package dev.elliotfrost.anarchybot;
 
+import com.mattmalec.pterodactyl4j.PteroBuilder;
+import com.mattmalec.pterodactyl4j.client.entities.PteroClient;
 import dev.elliotfrost.anarchybot.database.DatabaseManager;
 import dev.elliotfrost.anarchybot.listeners.*;
 import net.dv8tion.jda.api.JDA;
@@ -14,6 +16,7 @@ import javax.security.auth.login.LoginException;
 public class Bot {
     private static final DatabaseManager databaseManager = new DatabaseManager();
     private static JDA jda;
+    private static PteroClient api;
 
 
     public static DatabaseManager getDatabaseManager() {
@@ -35,8 +38,12 @@ public class Bot {
             jda.updateCommands().addCommands(link).complete();
 
             Bot.jda = jda;
+
+        Bot.api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
     }
     public static void main(String[] args) throws LoginException { Bot bot = new Bot(); }
 
     public static JDA getJDA() { return jda; }
+
+    public static PteroClient getP4J() { return api; }
 }
