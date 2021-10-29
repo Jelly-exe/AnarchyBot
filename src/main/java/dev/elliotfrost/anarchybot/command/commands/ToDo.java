@@ -4,6 +4,7 @@ import dev.elliotfrost.anarchybot.Bot;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ToDo implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
+        if (!ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) { return; }
         List<String> args = ctx.getArgs();
         Bot.getDatabaseManager().getDatabaseToDo().getToDoList(ctx.getChannel().getId());
         String query = "SELECT * FROM todols WHERE channelid = " + ctx.getChannel().getId() + ";";
