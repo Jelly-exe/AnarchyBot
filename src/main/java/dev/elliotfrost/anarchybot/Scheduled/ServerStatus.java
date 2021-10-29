@@ -22,11 +22,12 @@ import java.util.Scanner;
 
 public class ServerStatus implements Runnable {
 
+    private PteroClient api;
+
     @Override
     public void run() {
         if (Config.get("DEV").equals("true")) {return;}
         ArrayList<String> messages = new ArrayList<>();
-        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
         UtilizationState Powerstate_SMP = api.retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
         UtilizationState Powerstate_ANARCHY = api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
         UtilizationState Powerstate_LOBBY = api.retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
@@ -44,7 +45,7 @@ public class ServerStatus implements Runnable {
         }
         MessageEmbed Anarchy = new EmbedBuilder()
                 .setTitle("Status: " + Powerstate_ANARCHY)
-                .setDescription("The ANARCHY Server!")
+                .setDescription("The Anarchy Server!")
                 .setFooter("anarchy.ciputin.cf","https://i.imgur.com/i4ht6nZ.png")
                 .setColor(Determinestatecolor(Powerstate_ANARCHY))
                 .build();
@@ -68,8 +69,8 @@ public class ServerStatus implements Runnable {
                 .build();
 
         Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA()
-                                .getGuildById(Config.get("GUILD-ID")))
-                        .getTextChannelById(Config.get("STATUS-CHANNEL")))
+                .getGuildById(Config.get("GUILD-ID")))
+                .getTextChannelById(Config.get("STATUS-CHANNEL")))
                 .editMessageById(messages.get(0), String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
                 .setEmbeds(Anarchy, Bungee, Lobby, SMP)
                 .complete();
@@ -101,6 +102,8 @@ public class ServerStatus implements Runnable {
         for (Message message : old) {
             Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.get("STATUS-CHANNEL"))).deleteMessageById(message.getId()).complete();
         }
+        PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
+        this.api = api;
     }
 
     private Color Determinestatecolor(UtilizationState Powerstate) {
