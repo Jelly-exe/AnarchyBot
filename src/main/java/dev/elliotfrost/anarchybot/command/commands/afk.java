@@ -8,12 +8,13 @@ import java.util.List;
 public class afk implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
-        List<String> args = ctx.getArgs();
-        if (ctx.getMember().getNickname().startsWith("[AFK] ")) {
-            String[] nick = ctx.getMember().getNickname().split("[AFK] ");
-            ctx.getMember().modifyNickname(nick.toString()).complete();
+        String name = ctx.getMember().getNickname();
+        if (name == null) name =  ctx.getAuthor().getName();
+        if (name.startsWith("[AFK] ")) {
+            String withoutafk = name.substring(5);
+            ctx.getMember().modifyNickname(withoutafk).complete();
         } else {
-            ctx.getMember().modifyNickname("[AFK] " + ctx.getMember().getNickname()).complete();
+            ctx.getMember().modifyNickname("[AFK] " + name).complete();
         }
     }
 
@@ -24,6 +25,6 @@ public class afk implements ICommand {
 
     @Override
     public List<String> getAliases() {
-        return List.of();
+        return List.of("offline", "away");
     }
 }
