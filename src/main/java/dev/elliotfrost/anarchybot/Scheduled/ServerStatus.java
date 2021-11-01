@@ -1,6 +1,5 @@
 package dev.elliotfrost.anarchybot.Scheduled;
 
-import com.coreoz.wisp.Scheduler;
 import com.mattmalec.pterodactyl4j.UtilizationState;
 import dev.elliotfrost.anarchybot.Bot;
 import dev.elliotfrost.anarchybot.Config;
@@ -39,25 +38,25 @@ public class ServerStatus implements Runnable {
                 .setTitle("Status: " + Powerstate_ANARCHY)
                 .setDescription("The Anarchy Server!")
                 .setFooter("anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .setColor(DetermineStateColor(Powerstate_ANARCHY))
                 .build();
         MessageEmbed Bungee = new EmbedBuilder()
                 .setTitle("Status: " + Powerstate_BUNGEE)
                 .setDescription("The Bungee Server!")
                 .setFooter("anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .setColor(DetermineStateColor(Powerstate_ANARCHY))
                 .build();
         MessageEmbed Lobby = new EmbedBuilder()
                 .setTitle("Status: " + Powerstate_LOBBY)
                 .setDescription("The Lobby Server!")
                 .setFooter("anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .setColor(DetermineStateColor(Powerstate_ANARCHY))
                 .build();
         MessageEmbed SMP = new EmbedBuilder()
                 .setTitle("Status: " + Powerstate_SMP)
                 .setDescription("The SMP Server!")
                 .setFooter("anarchy.ciputin.cf", "https://i.imgur.com/i4ht6nZ.png")
-                .setColor(Determinestatecolor(Powerstate_ANARCHY))
+                .setColor(DetermineStateColor(Powerstate_ANARCHY))
                 .build();
 
         Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA()
@@ -66,10 +65,10 @@ public class ServerStatus implements Runnable {
                 .editMessageById(messages.get(0), String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
                 .setEmbeds(Anarchy, Bungee, Lobby, SMP)
                 .complete();
-        new Scheduler().gracefullyShutdown();
+        System.out.println(Thread.activeCount());
     }
 
-    private Color Determinestatecolor(UtilizationState Powerstate) {
+    private Color DetermineStateColor(UtilizationState Powerstate) {
         if (!String.valueOf(Powerstate).equals("RUNNING")) { return Color.RED; } else { return Color.blue; }
     }
 }
