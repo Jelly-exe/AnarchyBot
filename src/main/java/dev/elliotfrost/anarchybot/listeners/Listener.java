@@ -3,6 +3,7 @@ package dev.elliotfrost.anarchybot.listeners;
 import com.coreoz.wisp.Scheduler;
 import com.coreoz.wisp.SchedulerConfig;
 import com.coreoz.wisp.schedule.Schedules;
+import dev.elliotfrost.anarchybot.Scheduled.NewStatuses;
 import dev.elliotfrost.anarchybot.Scheduled.ServerStatus;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -25,12 +26,12 @@ public class Listener extends ListenerAdapter {
             e.printStackTrace();
         }
         // Give JDA time to finish loading before execution of statuses
-        new ServerStatus().newStatuses();
+        new NewStatuses().run();
         new Scheduler(
                 SchedulerConfig
                         .builder()
                         .minThreads(1)
-                        .maxThreads(2)
+                        .maxThreads(1)
                         .threadsKeepAliveTime(Duration.ofSeconds(5))
                         .build()
         ).schedule(new ServerStatus(), Schedules.fixedDelaySchedule(Duration.ofSeconds(10)));
