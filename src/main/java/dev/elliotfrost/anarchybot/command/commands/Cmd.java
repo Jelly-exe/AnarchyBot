@@ -16,7 +16,7 @@ public class Cmd implements ICommand {
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
         List<String> args = ctx.getArgs();
-        List<String> nono = Arrays.asList("op", "stop", "ban");
+        List<String> nono = Arrays.asList(Config.get("BANNED-COMMANDS").split(","));
         String command = String.join(" ", args); // Join the arguments into one string
         boolean hasbadcommand = new CheckArrayContains().Checker(args, nono);
         if (hasbadcommand) {
