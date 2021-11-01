@@ -1,6 +1,7 @@
 package dev.elliotfrost.anarchybot.Scheduled;
 
 import com.mattmalec.pterodactyl4j.UtilizationState;
+import com.mattmalec.pterodactyl4j.client.entities.ClientServer;
 import dev.elliotfrost.anarchybot.Bot;
 import dev.elliotfrost.anarchybot.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,10 +20,10 @@ public class ServerStatus implements Runnable {
     @Override
     public void run() {
         ArrayList<String> messages = new ArrayList<>();
-        UtilizationState Powerstate_SMP = Bot.getP4J().retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_ANARCHY = Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_LOBBY = Bot.getP4J().retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).execute().retrieveUtilization().execute().getState();
-        UtilizationState Powerstate_BUNGEE = Bot.getP4J().retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).execute().retrieveUtilization().execute().getState();
+        UtilizationState Powerstate_SMP = Bot.getP4J().retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
+        UtilizationState Powerstate_ANARCHY = Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
+        UtilizationState Powerstate_LOBBY = Bot.getP4J().retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
+        UtilizationState Powerstate_BUNGEE = Bot.getP4J().retrieveServerByIdentifier(Config.get("BUNGEE-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
         try {
             File myObj = new File("status-messages.txt");
             Scanner myReader = new Scanner(myObj);
@@ -65,7 +66,6 @@ public class ServerStatus implements Runnable {
                 .editMessageById(messages.get(0), String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
                 .setEmbeds(Anarchy, Bungee, Lobby, SMP)
                 .complete();
-        System.out.println(Thread.activeCount());
     }
 
     private Color DetermineStateColor(UtilizationState Powerstate) {
