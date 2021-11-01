@@ -40,4 +40,11 @@ public class Config {
             return dotenv.get("BOT-SUPPORT-CAT");
         }
     }
+    public static String getStatus() {
+        if (Objects.equals(dotenv.get("DEV"), "true")) {
+            return dotenv.get("DEV-STATUS-CHANNEL");
+        } else {
+            return dotenv.get("STATUS-CHANNEL");
+        }
+    }
 }
