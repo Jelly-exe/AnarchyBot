@@ -11,7 +11,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -19,7 +18,7 @@ public class ServerStatus implements Runnable {
 
     @Override
     public void run() {
-        ArrayList<String> messages = new ArrayList<>();
+        String messageid = null;
         UtilizationState Powerstate_SMP = Bot.getP4J().retrieveServerByIdentifier(Config.get("SMP-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
         UtilizationState Powerstate_ANARCHY = Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
         UtilizationState Powerstate_LOBBY = Bot.getP4J().retrieveServerByIdentifier(Config.get("LOBBY-SERVER-ID")).flatMap(ClientServer::retrieveUtilization).execute().getState();
@@ -27,9 +26,7 @@ public class ServerStatus implements Runnable {
         try {
             File myObj = new File("status-messages.txt");
             Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                messages.add(myReader.nextLine());
-            }
+            messageid = myReader.next();
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
@@ -63,7 +60,7 @@ public class ServerStatus implements Runnable {
         Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA()
                                 .getGuildById(Config.get("GUILD-ID")))
                         .getTextChannelById(Config.getStatus()))
-                .editMessageById(messages.get(0), String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
+                .editMessageById(messageid, String.format("Statuses (last updated <t:%s:R>):", Instant.now().getEpochSecond()))
                 .setEmbeds(Anarchy, Bungee, Lobby, SMP)
                 .complete();
     }

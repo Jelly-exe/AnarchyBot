@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 public class NewStatuses {
@@ -17,21 +16,15 @@ public class NewStatuses {
                 .retrievePast(100)
                 .complete();
         /* Send new messages */
-        Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.getStatus())).sendMessage("Statuses:").complete();
-
-        /* Get history of said messages */
-        List<Message> messages = Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.getStatus())).getIterableHistory().limit(4).complete();
-
-        /* save history */
+        String id = Objects.requireNonNull(Objects.requireNonNull(Bot.getJDA().getGuildById(Config.get("GUILD-ID"))).getTextChannelById(Config.getStatus())).sendMessage("Statuses:").complete().getId();
+        /* save message id */
         try {
             FileWriter myWriter = new FileWriter("status-messages.txt");
-            for (Message message : messages) {
-                myWriter.append(message.getId()).append("\n");
-            }
+            myWriter.write(id);
             myWriter.close();
         } catch (
         IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred writing the status-message id.");
             e.printStackTrace();
         }
         for (Message message : old) {
