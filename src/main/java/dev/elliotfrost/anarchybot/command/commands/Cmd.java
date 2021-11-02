@@ -24,8 +24,8 @@ public class Cmd implements ICommand {
         if (ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) hasbadcommand = false;
         if (hasbadcommand) {
             ctx.getChannel().sendMessage("You cannot perform command `" + command + "` because you do not have the permission.").queue();
-            return;
-        } else {
+        }
+        if (!hasbadcommand) {
             Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID"))
                     .flatMap(server -> server.sendCommand(command)
                     .onErrorMap(throwable -> { this.error = throwable.getMessage();
