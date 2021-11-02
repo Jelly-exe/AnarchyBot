@@ -6,7 +6,6 @@ import dev.elliotfrost.anarchybot.Config;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
 import dev.elliotfrost.anarchybot.functions.CheckArrayContains;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.Arrays;
@@ -17,7 +16,6 @@ public class Cmd implements ICommand {
 
     @Override
     public void handle(CommandContext ctx) {
-        JDA jda = ctx.getJDA();
         List<String> args = ctx.getArgs();
         List<String> nono = Arrays.asList(Config.get("BANNED_COMMANDS").split(","));
         StringBuilder cmd = new StringBuilder();
