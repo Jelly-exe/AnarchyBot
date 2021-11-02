@@ -1,7 +1,6 @@
 package dev.elliotfrost.anarchybot.command.commands;
 
-import com.mattmalec.pterodactyl4j.PteroBuilder;
-import com.mattmalec.pterodactyl4j.client.entities.PteroClient;
+import dev.elliotfrost.anarchybot.Bot;
 import dev.elliotfrost.anarchybot.Config;
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
@@ -25,11 +24,11 @@ public class Cmd implements ICommand {
         if (ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) hasbadcommand = false;
         if (hasbadcommand) {
             ctx.getChannel().sendMessage("You cannot perform command `" + command + "` because you do not have the permission.").queue();
+            return;
         } else {
-            PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
-            api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID"))
+            Bot.getP4J().retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID"))
                     .flatMap(server -> server.sendCommand(command)
-                            .onErrorMap(throwable -> { this.error = throwable.getMessage();
+                    .onErrorMap(throwable -> { this.error = throwable.getMessage();
                         return null;
                     }))
                     .execute();
