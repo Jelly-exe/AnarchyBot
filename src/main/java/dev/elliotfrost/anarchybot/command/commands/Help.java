@@ -16,7 +16,7 @@ public class Help implements ICommand {
                 .setDescription("Look at all my cool features!")
                 .setColor(Color.BLUE)
                 .addField("Regular commands", "---", false)
-                .addField("cmd", "Execute an acceptable command on the Anarchy Server", true)
+                .addField("cmd", "Execute an acceptable command on the Anarchy Server\n*Aliases:\nexec, execute", true)
                 .addField("help","Help Message!", true)
                 .addField("membercount", "Make the bot count the members in the server!", true)
                 .addField("ping", "Test the connection between the bot and the discord\nAlias: ciisgay",true)
