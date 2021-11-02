@@ -20,11 +20,13 @@ public class Cmd implements ICommand {
         JDA jda = ctx.getJDA();
         List<String> args = ctx.getArgs();
         List<String> nono = Arrays.asList(Config.get("BANNED_COMMANDS").split(","));
-        String command = ctx.getArgs().toString();
+        StringBuilder cmd = new StringBuilder();
+        ctx.getArgs().forEach(value -> cmd.append(value).append(" "));
+        String command = cmd.toString();
         boolean hasbadcommand = new CheckArrayContains().Checker(args, nono);
         if (ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) hasbadcommand = false;
         if (hasbadcommand) {
-            ctx.getChannel().sendMessage("You cannot perform command: `" + command + "` because you do not have the permission.").queue();
+            ctx.getChannel().sendMessage("You cannot perform command `" + command + "` because you do not have the permission.").queue();
         } else {
             PteroClient api = PteroBuilder.createClient("https://panel.skynode.pro", Config.get("PTERO_TOKEN"));
             api.retrieveServerByIdentifier(Config.get("ANARCHY-SERVER-ID"))
