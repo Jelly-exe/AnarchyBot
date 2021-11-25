@@ -31,3 +31,7 @@ jobs:
       with:
         name: AnarchyBot
         path: build/libs
+    - name: Release the JAR
+      uses: yakuhzi/release-asset@v1.2.3
+      with:
+        file: AnarchyBot.jar
