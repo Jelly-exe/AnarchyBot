@@ -26,15 +26,12 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.4
+    - name: Upload to Panel
+  # You may pin to the exact commit or the version.
+  # uses: Atyn/simple-sftp-action@a684a17fdd2b79d23101d568d9e8b5070f58e685
+      uses: Atyn/simple-sftp-action@0.0.2
       with:
-        name: AnarchyBot
-        path: build/libs/AnarchyBot.jar
-    - name: Make a Release
-      uses: kbrashears5/github-action-release-maker@v1.0.0
-      with:
-    # Version name to give the release
-       VERSION: ${{ github.event.client_payload.version }}
-    # Personal access token with Repo privileges
-       TOKEN: ${{ secrets.TOKEN }}
+    # URL to the SFTP server. Example: sftp://USERNAME:PASSWORD@example.com/remote-directory
+          url: ${{ secrets.SFTP }}
+    # The directory that should be uploaded
+          localdir: /
