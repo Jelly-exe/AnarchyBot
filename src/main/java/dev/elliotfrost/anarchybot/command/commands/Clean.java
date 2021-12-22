@@ -2,6 +2,7 @@ package dev.elliotfrost.anarchybot.command.commands;
 
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
@@ -10,6 +11,7 @@ public class Clean implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
         List<String> args = ctx.getArgs();
+        if (!ctx.getMember().hasPermission(Permission.MESSAGE_MANAGE)) { return; }
         try {
             List<Message> messages = ctx.getChannel()
                     .getHistory()

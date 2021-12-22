@@ -16,7 +16,7 @@ public class RolesMenu implements ICommand {
     public void handle(CommandContext ctx) {
         JDA jda = ctx.getJDA();
 
-        if (!ctx.getMember().hasPermission(Permission.valueOf("ADMINISTRATOR"))) return;
+        if (!ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) { return; }
 
         SelectionMenu menu = SelectionMenu.create("menu:roles")
                 .setPlaceholder("Select a role to assign...")

@@ -1,7 +1,6 @@
 package dev.elliotfrost.anarchybot.listeners;
 
 import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -9,8 +8,6 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class Roles extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Roles.class);
@@ -27,8 +24,15 @@ public class Roles extends ListenerAdapter {
                     .build();
 
             Role role = event.getGuild().getRoleById(event.getValues().get(0));
-            event.getGuild().addRoleToMember(event.getUser().getId(), role).queue();
-            event.getMessage().editMessageComponents(ActionRow.of(menu)).queue(message -> event.reply("You now have the role: " + role.getName()).setEphemeral(true).queue());
+            String reply;
+            if (event.getGuild().retrieveMember(event.getUser()).complete().getRoles().contains(role)) {
+                event.getGuild().removeRoleFromMember(event.getUser().getId(),role).queue();
+                reply = "I removed the role: " + role.getName();
+            } else {
+                event.getGuild().addRoleToMember(event.getUser().getId(), role).queue();
+                reply = "You now have the role: " + role.getName();
+            }
+            event.getMessage().editMessageComponents(ActionRow.of(menu)).queue(message -> event.reply(reply).setEphemeral(true).queue());
         }
     }
 }

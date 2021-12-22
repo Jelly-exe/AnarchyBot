@@ -1,10 +1,9 @@
 package dev.elliotfrost.anarchybot.database;
 
+import dev.elliotfrost.anarchybot.Bot;
+
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseTickets {
     private final DataSource ds;
@@ -28,5 +27,20 @@ public class DatabaseTickets {
             throwables.printStackTrace();
         }
         return 0;
+    }
+    public boolean postNewTicket(String authorId, String ChannelID, String reason) {
+        int ticketnum = Bot.getDatabaseManager().getDatabaseTickets().getTicketNumber(authorId);
+        long unixTime = System.currentTimeMillis() / 1000L;
+        try {
+            Connection connection = this.ds.getConnection();
+            Statement statement = connection.createStatement();
+            boolean resultSet = statement.execute(String.format("INSERT INTO Tickets (id, authorId, channelId, reason, timeOpened) VALUES ('%x', '%s', '%s', '%s', '%o')", ticketnum, authorId, ChannelID, reason, unixTime));
+
+            connection.close();
+            return resultSet;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return true;
     }
  }

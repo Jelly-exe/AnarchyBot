@@ -23,17 +23,15 @@ public class CommandManager extends ListenerAdapter {
         addCommand(new Help());
         addCommand(new TicketMenu());
         addCommand(new Suggest());
-        addCommand(new Testing());
         addCommand(new Clean());
         addCommand(new Clean2());
         addCommand(new RolesMenu());
         addCommand(new Cmd());
+        addCommand(new afk());
     }
 
     private void addCommand(ICommand cmd) {
         boolean nameFound = this.commands.stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
-
-        // Add check for dupe alias's at this point
 
         if (nameFound) {
             throw new IllegalArgumentException("A command with this name is already present");

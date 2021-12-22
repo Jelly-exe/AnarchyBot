@@ -33,7 +33,7 @@ public class Suggest implements ICommand {
                         message.addReaction("\u274C").queue();
                     }
             );
-            channel.deleteMessageById(ctx.getMessage().getId()).queue();
+            ctx.getChannel().deleteMessageById(ctx.getMessage().getId()).queue();
         }
     }
 

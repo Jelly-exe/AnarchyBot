@@ -2,6 +2,7 @@ package dev.elliotfrost.anarchybot.command.commands;
 
 import dev.elliotfrost.anarchybot.command.CommandContext;
 import dev.elliotfrost.anarchybot.command.ICommand;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.requests.restaction.pagination.MessagePaginationAction;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Clean2 implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
+        if (!ctx.getMember().hasPermission(Permission.MESSAGE_MANAGE)) { return; }
         List<String> args = ctx.getArgs();
         MessagePaginationAction messages = ctx.getChannel().getIterableHistory();
         AtomicInteger number = new AtomicInteger();

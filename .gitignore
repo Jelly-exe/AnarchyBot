@@ -29,3 +29,10 @@ build/*
 /src/main/java/META-INF/MANIFEST.MF
 /out/production/resources/logback.xml
 /out/
+transcripts/*
+
+status-messages.txt
+
+# Stupid Mac OS file
+
+.DS_Store
